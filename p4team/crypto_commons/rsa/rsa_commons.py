@@ -1,4 +1,32 @@
-from p4team.crypto_commons.generic import bytes_to_long, find_divisor, multiply
+from p4team.crypto_commons.generic import bytes_to_long, find_divisor, multiply, long_to_bytes
+
+
+def rsa_printable(x, exp, n):
+    """
+    Calculate RSA encryption/decryption and return result as bytes
+    :param x: plaintex or ciphertext, can be either bytes or long
+    :param exp: exponent
+    :param n: modulus
+    :return: result bytes
+    """
+    return long_to_bytes(rsa(x, exp, n))
+
+
+def rsa(x, exp, n):
+    """
+    Calculate RSA encryption/decryption and return result as long
+    :param x: plaintex or ciphertext, can be either bytes or long
+    :param exp: exponent
+    :param n: modulus
+    :return: result long
+    """
+    return pow(ensure_long(x), exp, n)
+
+
+def ensure_long(x):
+    if type(x) is str:
+        x = bytes_to_long(x)
+    return x
 
 
 def solve_crt(residue_and_moduli):
@@ -40,14 +68,58 @@ def get_fi_repeated_prime(p, k=1):
     return pow(p, k - 1) * (p - 1)
 
 
-def extended_gcd(aa, bb):
-    lastremainder, remainder = abs(aa), abs(bb)
+def extended_gcd(a, b):
+    """
+    Calculate extended greates common divisor of numbers a,b
+    :param a: first number
+    :param b: second number
+    :return: gcd(a,b) and reminders
+    """
+    lastremainder, remainder = abs(a), abs(b)
     x, lastx, y, lasty = 0, 1, 1, 0
     while remainder:
         lastremainder, (quotient, remainder) = remainder, divmod(lastremainder, remainder)
         x, lastx = lastx - quotient * x, x
         y, lasty = lasty - quotient * y, y
-    return lastremainder, lastx * (-1 if aa < 0 else 1), lasty * (-1 if bb < 0 else 1)
+    return lastremainder, lastx * (-1 if a < 0 else 1), lasty * (-1 if b < 0 else 1)
+
+
+def gcd(a, b):
+    """
+    Return simple greatest common divisor of a and b
+    :param a:
+    :param b:
+    :return: gcd(a,b)
+    """
+    return extended_gcd(a, b)[0]
+
+
+def gcd_multi(numbers):
+    """
+    Calculate gcd for the list of numbers
+    :param numbers: list of numbers
+    :return: gcd(a,b,c,d,...)
+    """
+    return reduce(gcd, numbers)
+
+
+def lcm(a, b):
+    """
+    Calculate least common multiple of a,b
+    :param a: first number
+    :param b: second number
+    :return: lcm(a,b)
+    """
+    return a * b / gcd(a, b)
+
+
+def lcm_multi(numbers):
+    """
+    Calculate lcm for the list of numbers
+    :param numbers: list of numbers
+    :return: lcm(a,b,c,d,...)
+    """
+    return multiply(numbers) / gcd_multi(numbers)
 
 
 def modinv(x, y):
@@ -103,7 +175,7 @@ def hensel_lifting(f, df, p, k, base_solution):
     :return: possible solutions to f(x) = 0 mod p^k
     """
     previous_solution = [base_solution]
-    for x in range(k-1):
+    for x in range(k - 1):
         new_solution = []
         for i, n in enumerate(previous_solution):
             dfr = df(n)

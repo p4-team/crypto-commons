@@ -43,7 +43,21 @@ def chunk_with_reminder(input_data, size):
 
 
 def multiply(values):
-    return reduce(lambda x, y: x * y, values)
+    """
+    Multiply values on the list
+    :param values: list of values
+    :return: a*b*c*d...
+    """
+    return reduce(lambda x, y: x * y, values, 1)
+
+
+def factorial(n):
+    """
+    Return factorial of n
+    :param n: number
+    :return: n!
+    """
+    return multiply(list(long_range(1, n+1)))
 
 
 def get_primes(limit=1000000):
@@ -54,7 +68,7 @@ def get_primes(limit=1000000):
     """
     import math
     m = limit + 1
-    numbers = [True for i in range(m)]
+    numbers = [True for _ in range(m)]
     for i in range(2, int(math.sqrt(limit))):
         if numbers[i]:
             for j in range(i * i, m, i):
