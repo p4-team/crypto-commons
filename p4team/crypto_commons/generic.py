@@ -25,21 +25,21 @@ def chunk(input_data, size):
     :return: list of chunks
     """
     assert len(input_data) % size == 0, \
-        "can't split data into chunks of equal size, try using chunk_with_reminder or pad data"
+        "can't split data into chunks of equal size, try using chunk_with_remainder or pad data"
     return [input_data[i * size:(i + 1) * size] for i in range(len(input_data) / size)]
 
 
-def chunk_with_reminder(input_data, size):
+def chunk_with_remainder(input_data, size):
     """
     Chunk given bytes into parts, with the possibility of last chunk not full
     :param input_data: bytes to split
     :param size: size of a single full chunk
     :return: list of chunks
     """
-    reminder_start = -(len(input_data) % size)
-    core = input_data[:reminder_start]
-    reminder = input_data[reminder_start:]
-    return chunk(core, size) + [reminder]
+    remainder_start = -(len(input_data) % size)
+    core = input_data[:remainder_start]
+    remainder = input_data[remainder_start:]
+    return chunk(core, size) + [remainder]
 
 
 def multiply(values):

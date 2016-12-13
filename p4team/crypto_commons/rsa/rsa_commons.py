@@ -73,7 +73,7 @@ def extended_gcd(a, b):
     Calculate extended greates common divisor of numbers a,b
     :param a: first number
     :param b: second number
-    :return: gcd(a,b) and reminders
+    :return: gcd(a,b) and remainders
     """
     lastremainder, remainder = abs(a), abs(b)
     x, lastx, y, lasty = 0, 1, 1, 0
