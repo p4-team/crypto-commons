@@ -9,7 +9,9 @@ def bytes_to_long(data):
 
 def long_to_bytes(data):
     """
-    Convert long number to string
+    Convert long number to string.
+    This function is NOT safe for multi-byte characters!
+    If you're decoding some UTF data use the function from pycrypto.
     :param data: long integer
     :return: ascii encoded string
     """
