@@ -1,4 +1,4 @@
-from p4team.crypto_commons.generic import long_to_bytes
+from crypto_commons.generic import long_to_bytes
 
 
 def lsb_oracle(encrypted_data, multiplicator, upper_bound, oracle_fun):

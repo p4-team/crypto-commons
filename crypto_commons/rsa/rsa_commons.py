@@ -1,4 +1,4 @@
-from p4team.crypto_commons.generic import bytes_to_long, find_divisor, multiply, long_to_bytes
+from crypto_commons.generic import bytes_to_long, find_divisor, multiply, long_to_bytes
 
 
 def rsa_printable(x, exp, n):

@@ -59,7 +59,7 @@ def factorial(n):
     :param n: number
     :return: n!
     """
-    return multiply(list(long_range(1, n+1)))
+    return multiply(list(long_range(1, n + 1)))
 
 
 def get_primes(limit=1000000):
@@ -140,3 +140,21 @@ def discrete_log(x, xi, limit=1000):
     for i in long_range(2, limit):
         if x ** i == xi:
             return i
+
+
+def xor(t1, t2):
+    """
+    XOR two arrays with integers
+    :param t1: array 1
+    :param t2: array 2
+    :return: list with xored values
+    """
+    return [x[0] ^ x[1] for x in zip(t1, t2)]
+
+
+def is_printable(data):
+    import string
+    for c in data:
+        if c not in string.printable:
+            return False
+    return True

@@ -1,6 +1,6 @@
 import string
 
-from p4team.crypto_commons.generic import chunk
+from crypto_commons.generic import chunk
 
 
 def brute_aes_suffix(encrypt, known_suffix="", expected_suffix_len=64, prefix=""):
