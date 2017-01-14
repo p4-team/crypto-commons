@@ -70,13 +70,13 @@ def get_primes(limit=1000000):
     """
     import math
     m = limit + 1
-    numbers = [True for _ in range(m)]
-    for i in range(2, int(math.sqrt(limit))):
+    numbers = [True for _ in long_range(0, m)]
+    for i in long_range(2, int(math.sqrt(limit))):
         if numbers[i]:
-            for j in range(i * i, m, i):
+            for j in long_range(i * i, m, i):
                 numbers[j] = False
     primes = []
-    for i in range(2, m):
+    for i in long_range(2, m):
         if numbers[i]:
             primes.append(i)
     return primes
@@ -92,7 +92,7 @@ def factor(n, limit=1000000):
     factors = []
     primes = get_primes(limit)
     for prime in primes:
-        while n % prime == 0 and n > 1:
+        while n % prime == 0 and n > 2:
             n /= prime
             factors.append(prime)
         if n < 2:
