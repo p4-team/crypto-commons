@@ -92,7 +92,7 @@ def factor(n, limit=1000000):
     factors = []
     primes = get_primes(limit)
     for prime in primes:
-        while n % prime == 0 and n > 3:
+        while n % prime == 0 and n > 1:
             n /= prime
             factors.append(prime)
         if n < 2:
