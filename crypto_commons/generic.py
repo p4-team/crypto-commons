@@ -75,10 +75,7 @@ def get_primes(limit=1000000):
         if numbers[i]:
             for j in long_range(i * i, m, i):
                 numbers[j] = False
-    primes = []
-    for i in long_range(2, m):
-        if numbers[i]:
-            primes.append(i)
+    primes = [i for i in long_range(2, m) if numbers[i]]
     return primes
 
 

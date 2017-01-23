@@ -220,9 +220,7 @@ def homomorphic_blinding_rsa(payload, get_signature, N, splits=2):
     :param splits: on how many parts the data should be split
     :return: signed data
     """
-    data = payload
-    if payload is not int:
-        data = bytes_to_long(payload)
+    data = ensure_long(payload)
     parts = []
     for i in range(splits):
         smallest_divisor = find_divisor(data)
