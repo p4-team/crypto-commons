@@ -18,16 +18,27 @@ def receive_until(s, delimiters):
     return all_data + data
 
 
-def receive_until_match(s, regex):
-    s.settimeout(5.0)
+def receive_until_match(s, regex, timeout=1.0, limit=-1):
+    """
+    Receive data from socket until regular expression is matching
+    :param s: socket
+    :param regex: regex to match
+    :param timeout: read timeout
+    :param limit: data read attempts limit
+    :return: read data
+    """
+    s.settimeout(timeout)
     all_data = ""
+    i = 0
     try:
-        all_data += s.recv(1)
         while re.search(regex, all_data) is None:
+            if limit != -1 and i > limit:
+                break
             all_data += s.recv(1)
-        return all_data
+            i += 1
     except:
-        return all_data
+        pass
+    return all_data
 
 
 def send(s, payload):
