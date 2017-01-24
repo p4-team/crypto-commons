@@ -32,9 +32,10 @@ def receive_until_match(s, regex, timeout=1.0, limit=-1):
     i = 0
     try:
         while re.search(regex, all_data) is None:
-            if limit != -1 and i > limit:
+            new_char = s.recv(1)
+            if (limit != -1 and i > limit) or new_char == '':
                 break
-            all_data += s.recv(1)
+            all_data += new_char
             i += 1
     except:
         pass
