@@ -27,3 +27,24 @@ Especially when you're missing some parameters, which are not necessary for the 
 Some libraries are not usable in CTF environment because they will automatically fail detecting some "invalid" parameters, 
 while in reality we know the parameters are wrong and we need a few more steps to solve the task.
 
+## Installation
+
+``` bash
+sudo python setup.py install
+```
+## Usage example
+
+``` python
+from crypto_commons import generic
+
+#xor a hex array with a string and print the result
+a = [0x61, 0x53, 0x40, 0x47, 0x42, 0x59, 0x45, 0x5c, 0x08]
+b = "123456789"
+
+b = map(ord, b)
+
+xored = map(chr, generic.xor(a, b))
+
+print(''.join(xored))
+
+```
