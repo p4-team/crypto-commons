@@ -41,9 +41,9 @@ from crypto_commons import generic
 a = [0x61, 0x53, 0x40, 0x47, 0x42, 0x59, 0x45, 0x5c, 0x08]
 b = "123456789"
 
-b = list(map(ord, b))
+b = map(ord, b)
 
-xored = list(map(chr, generic.xor(a, b)))
+xored = map(chr, generic.xor(a, b))
 
 print(''.join(xored))
 
