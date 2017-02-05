@@ -149,6 +149,18 @@ def xor(t1, t2):
     return [x[0] ^ x[1] for x in zip(t1, t2)]
 
 
+def xor_string(t1, t2):
+    """
+    XOR two strings
+    :param t1: string 1
+    :param t2: string 2
+    :return: string with xored values
+    """
+    t1 = map(ord, t1)
+    t2 = map(ord, t2)
+    return "".join([chr(c) for c in xor(t1, t2)])
+
+
 def is_printable(data):
     import string
     for c in data:
