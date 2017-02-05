@@ -1,4 +1,5 @@
 import socket
+import telnetlib
 
 import re
 
@@ -44,3 +45,9 @@ def receive_until_match(s, regex, timeout=1.0, limit=-1):
 
 def send(s, payload):
     s.sendall(payload + "\n")
+
+
+def interactive(s):
+    t = new telnetlib.Telnet()
+    t.s = s
+    t.interact()
