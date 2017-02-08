@@ -1,6 +1,5 @@
 import socket
 import telnetlib
-
 import re
 
 
@@ -48,6 +47,6 @@ def send(s, payload):
 
 
 def interactive(s):
-    t = new telnetlib.Telnet()
-    t.s = s
+    t = telnetlib.Telnet()
+    t.sock = s
     t.interact()
