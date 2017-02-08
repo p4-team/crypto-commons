@@ -71,12 +71,12 @@ def main():
 main()
 ```
 
-[quiwi CTF again, crypto 400](https://github.com/p4-team/ctf/blob/master/2016-11-17-qiwi-2016/hensel/README.md)
+[qiwi CTF again, crypto 400](https://github.com/p4-team/ctf/blob/master/2016-11-17-qiwi-2016/hensel/README.md)
 
 ```python
 import gmpy2
-from src.crypto_commons.generic import long_to_bytes
-from src.crypto_commons.rsa.rsa_commons import hensel_lifting
+from crypto_commons.generic import long_to_bytes
+from crypto_commons.rsa.rsa_commons import hensel_lifting, modinv
 
 
 def main():
@@ -85,14 +85,13 @@ def main():
     c = 140823625180859595137593494178968497314300266616869468408596741823165198698204065579249727536890649445240801729293482339393915146972721826733382396566284303449925618355682242041225432010603850355326962069585919704623290128021782032477132287121179121257196031074006842188551083381364957799238533440938240326919
     p = gmpy2.isqrt(n)
     k = 2
-    base = pow(c, gmpy2.invert(e, p - 1), p)  # solution to pt^e mod p
+    base = pow(c, modinv(e, p - 1), p)  # solution to pt^e mod p
     f = lambda x: pow(x, e, n) - c
     df = lambda x: e * x
     r = hensel_lifting(f, df, p, k, base)  # lift pt^e mod p to pt^e mod p^k
     for solution in r:
         print(long_to_bytes(solution))
 
-    # print(long_to_bytes(pow(c, gmpy2.invert(e, p*(p - 1)), p)))
-
 main()
+
 ```
