@@ -51,7 +51,7 @@ print(''.join(xored))
 
 ```
 
-[qiwi CTF](https://github.com/p4-team/ctf/blob/master/2016-11-17-qiwi-2016/hastad/README.md)
+[qiwi CTF, crypto 400](https://github.com/p4-team/ctf/blob/master/2016-11-17-qiwi-2016/hastad/README.md)
 
 ```python
 from src.crypto_commons.generic import long_to_bytes
@@ -71,7 +71,7 @@ def main():
 main()
 ```
 
-[quiwi CTF again](https://github.com/p4-team/ctf/blob/master/2016-11-17-qiwi-2016/hensel/README.md)
+[quiwi CTF again, crypto 400](https://github.com/p4-team/ctf/blob/master/2016-11-17-qiwi-2016/hensel/README.md)
 
 ```python
 import gmpy2
