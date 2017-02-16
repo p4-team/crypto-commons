@@ -38,10 +38,13 @@ def chunk_with_remainder(input_data, size):
     :param size: size of a single full chunk
     :return: list of chunks
     """
-    remainder_start = -(len(input_data) % size)
-    core = input_data[:remainder_start]
-    remainder = input_data[remainder_start:]
-    return chunk(core, size) + [remainder]
+    if len(input_data) % size == 0:
+        return chunk(input_data, size)
+    else:
+        remainder_start = -(len(input_data) % size)
+        core = input_data[:remainder_start]
+        remainder = input_data[remainder_start:]
+        return chunk(core, size) + [remainder]
 
 
 def multiply(values):
@@ -159,6 +162,18 @@ def xor_string(t1, t2):
     t1 = map(ord, t1)
     t2 = map(ord, t2)
     return "".join([chr(c) for c in xor(t1, t2)])
+
+
+def xor_hex(t1, t2):
+    """
+    XOR two hex strings
+    :param t1: string 1
+    :param t2: string 2
+    :return: xored hex string
+    """
+    t1 = t1.decode("hex")
+    t2 = t2.decode("hex")
+    return xor_string(t1, t2).encode("hex")
 
 
 def is_printable(data):
