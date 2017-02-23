@@ -1,6 +1,5 @@
 import re
 import string
-
 import sys
 
 from crypto_commons.generic import chunk, xor_hex, chunk_with_remainder

@@ -1,7 +1,6 @@
 import random
 
-from p4team.crypto_commons.generic import long_to_bytes, multiply, factorial
-
+from crypto_commons.generic import long_to_bytes, multiply, factorial
 from crypto_commons.rsa.rsa_commons import ensure_long, modinv, lcm_multi
 
 """
