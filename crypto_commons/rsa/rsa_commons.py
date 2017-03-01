@@ -1,3 +1,5 @@
+import itertools
+
 from crypto_commons.generic import bytes_to_long, find_divisor, multiply, long_to_bytes
 
 
@@ -279,3 +281,12 @@ def modular_sqrt(a, p):
 def legendre_symbol(a, p):
     ls = pow(a, (p - 1) / 2, p)
     return -1 if ls == p - 1 else ls
+
+
+def common_factor_factorization(ns):
+    """
+    Try to factor given list of moduli by calculating gcd for each pair, hoping that some share the same prime
+    :param ns: list of moduli
+    :return: list of triplets (modulus1, modulus2, shared prime)
+    """
+    return [(n1, n2, gcd(n1, n2)) for n1, n2 in itertools.product(ns, ns) if n1 != n2 and gcd(n1, n2) != 1]
