@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name = "crypto-commons",
@@ -8,7 +8,5 @@ setup(
 
     url = "https://github.com/p4-team/crypto-commons",
 
-    packages = [
-    	"crypto_commons"
-    ]
+    packages = find_packages()
 )
