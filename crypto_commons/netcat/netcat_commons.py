@@ -39,6 +39,7 @@ def receive_until_match(s, regex, timeout=1.0, limit=-1):
             i += 1
     except:
         pass
+    s.settimeout(None)
     return all_data
 
 
