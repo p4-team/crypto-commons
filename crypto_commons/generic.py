@@ -28,8 +28,7 @@ def chunk(input_data, size):
     """
     assert len(input_data) % size == 0, \
         "can't split data into chunks of equal size, try using chunk_with_remainder or pad data"
-    return [input_data[i * size:(i + 1) * size] for i in range(len(input_data) / size)]
-
+    return [input_data[i:i+size] for i in range(0, len(input_data), size)]
 
 def chunk_with_remainder(input_data, size):
     """
