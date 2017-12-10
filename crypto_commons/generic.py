@@ -117,9 +117,10 @@ def factor(n, limit=1000000):
             factors.append(prime)
         if n < 2:
             break
-    if n < limit**2:
-        factors.append(n)
-        n = 1
+    else:
+        if n < limit**2:
+            factors.append(n)
+            n = 1
     return factors, n
 
 
