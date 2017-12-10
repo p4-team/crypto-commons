@@ -1,5 +1,3 @@
-from builtins import input, range
-import itertools
 
 from crypto_commons.generic import xor_string
 
@@ -9,11 +7,13 @@ def repeating_key_xor(ciphertexts):
     Run interactive session of repeating key xor breaking.
     :param ciphertexts: list of ciphertexts xored with the same repeating key
     """
+    import itertools
     xored_ciphertexts = [xor_string(first, second) for (first, second) in itertools.product(ciphertexts, repeat=2)]
     interactive_hack(xored_ciphertexts, ciphertexts)
 
 
 def interactive_hack(xored, ciphertexts):
+    from builtins import input, range
     while True:
         potential_plaintext_contents = input(">")
         ciphertext_len = len(ciphertexts[0])

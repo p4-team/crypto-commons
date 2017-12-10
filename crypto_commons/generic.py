@@ -80,7 +80,6 @@ def factorial(n):
     :return: n!
     """
 
-    # on Python 3 this is 10 times faster than multiply(range(1,n+1))
     import math
     return math.factorial(n)
 
@@ -118,10 +117,9 @@ def factor(n, limit=1000000):
             factors.append(prime)
         if n < 2:
             break
-    else:
-        if n < limit**2:
-            factors.append(n)
-            n = 1
+    if n < limit**2:
+        factors.append(n)
+        n = 1
     return factors, n
 
 
@@ -159,7 +157,6 @@ def find_divisor(n, limit=1000000):
     raise (Exception("No divisors found in range %d" % limit))
 
 
-
 def integer_log(x, xi, limit=1000):
     """
     Computation of integer logarithm.
@@ -177,6 +174,19 @@ def integer_log(x, xi, limit=1000):
             return i + 1
         if r > 0:
             return
+
+
+def discrete_log(x, xi, limit=1000):
+    """
+    Alias for integer_log added for backwards compability.
+    Computation of integer logarithm.
+    For x and x^i returns exponent i if such i exists.
+    :param x: base
+    :param xi: power value
+    :param limit: search limit
+    :return: exponent
+    """
+    return integer_log(x, xi, limit)
 
 
 def xor(t1, t2):
@@ -216,19 +226,13 @@ def xor_hex(t1, t2):
     t2 = codecs.decode(t2, "hex")
 
     try:
-        xorred = xor_string(t1, t2)
+        xored = xor_string(t1, t2)
     except TypeError:
-        xorred = bytes(xor(t1, t2))
-    return codecs.encode(xorred, "hex")
+        xored = bytes(xor(t1, t2))
+    return codecs.encode(xored, "hex")
 
 
 def is_printable(data):
     import string
-    printable = set(string.printable)
-    printable_bytes = set(string.printable.encode('ascii'))
-    printable.update(printable_bytes)
-    
-    for c in data:
-        if c not in printable:
-            return False
-    return True
+    printable = set(string.printable).union(string.printable.encode('utf-8'))
+    return len(set(data).difference(printable)) == 0 

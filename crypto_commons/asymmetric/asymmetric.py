@@ -36,7 +36,7 @@ def paillier_decrypt(c, factors, g):
     """
 
     def L(u, n):
-        return int((u - 1) / n)
+        return int((u - 1) // n)
 
     lbd = lcm_multi([p - 1 for p in factors])
     n = multiply(factors)
