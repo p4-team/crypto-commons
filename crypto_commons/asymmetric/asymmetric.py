@@ -10,7 +10,22 @@ Here are some less popular asymmetric cryptosystems:
 """
 
 
-def paillier_encrypt(m, g, n):
+def paillier_encrypt(m, g, n, r):
+    """
+    Encrypt data using Paillier Cryptosystem
+    Actually it's the same as Damgard Jurik with s=1
+    :param m:  plaintext to encrypt, can be either long or bytes
+    :param g: random public integer g
+    :param n: modulus
+    :param r: random r
+    :return: encrypted data as long
+    """
+    m = ensure_long(m)
+    n2 = n * n
+    return (pow(g, m, n2) * pow(r, n, n2)) % n2
+
+
+def paillier_encrypt_simple(m, g, n):
     """
     Encrypt data using Paillier Cryptosystem
     Actually it's the same as Damgard Jurik with s=1
@@ -19,10 +34,9 @@ def paillier_encrypt(m, g, n):
     :param n: modulus
     :return: encrypted data as long
     """
-    m = ensure_long(m)
     n2 = n * n
     r = random.randint(2, n2)
-    return (pow(g, m, n2) * pow(r, n, n2)) % n2
+    return paillier_encrypt(m, g, n, r)
 
 
 def paillier_decrypt(c, factors, g):
