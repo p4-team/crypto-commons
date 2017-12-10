@@ -1,22 +1,33 @@
+from builtins import range as long_range
+
 def bytes_to_long(data):
     """
-    Convert byte string to long integer
+    Convert byte string to integer
     :param data: byte string
-    :return: long integer
+    :return: integer
     """
-    return int(data.encode('hex'), 16)
+    try:
+        return int.from_bytes(data, 'big')
+    except TypeError:
+        return bytes_to_long(data.encode('utf-8'))
+    except AttributeError:
+        return int(data.encode('hex'), 16)
 
 
 def long_to_bytes(data):
     """
-    Convert long number to string.
+    Convert integer to string.
     This function is NOT safe for multi-byte characters!
     If you're decoding some UTF data use the function from pycrypto.
-    :param data: long integer
+    :param data: integer
     :return: ascii encoded string
     """
-    data = str(hex(long(data)))[2:-1]
-    return "".join([chr(int(data[i:i + 2], 16)) for i in range(0, len(data), 2)])
+    data = int(data)
+    data = hex(data).strip('0xL')
+    if len(data) % 2 == 1:
+        data = '0' + data
+
+    return bytes(bytearray(int(c, 16) for c in chunk(data, 2)))
 
 
 def chunk(input_data, size):
@@ -29,6 +40,7 @@ def chunk(input_data, size):
     assert len(input_data) % size == 0, \
         "can't split data into chunks of equal size, try using chunk_with_remainder or pad data"
     return [input_data[i:i+size] for i in range(0, len(input_data), size)]
+
 
 def chunk_with_remainder(input_data, size):
     """
@@ -52,7 +64,8 @@ def multiply(values):
     :param values: list of values
     :return: a*b*c*d...
     """
-    return reduce(lambda x, y: x * y, values, 1)
+    import functools
+    return functools.reduce(lambda x, y: x * y, values, 1)
 
 
 def factorial(n):
@@ -61,8 +74,10 @@ def factorial(n):
     :param n: number
     :return: n!
     """
-    return multiply(list(long_range(1, n + 1)))
 
+    # on Python 3 this is 10 times faster than multiply(range(1,n+1))
+    import math
+    return math.factorial(n)
 
 def get_primes(limit=1000000):
     """
@@ -92,10 +107,14 @@ def factor(n, limit=1000000):
     primes = get_primes(limit)
     for prime in primes:
         while n % prime == 0 and n > 2:
-            n /= prime
+            n //= prime
             factors.append(prime)
         if n < 2:
             break
+    else:
+        if n < limit**2:
+            factors.append(n)
+            n = 1
     return factors, n
 
 
@@ -146,18 +165,23 @@ def long_range(start, stop, step=1):
         i += step
 
 
-def discrete_log(x, xi, limit=1000):
+def integer_log(x, xi, limit=1000):
     """
-    Naive computation of discrete logarithm. Useful only for small numbers.
-    For x and x^i returns exponent i
+    Computation of integer logarithm.
+    For x and x^i returns exponent i. If no such i exists
     :param x: base
     :param xi: power value
     :param limit: search limit
     :return: exponent
     """
-    for i in long_range(2, limit):
-        if x ** i == xi:
-            return i
+    if xi == 1:
+        return 0
+    for i in range(limit):
+        xi, r = divmod(xi, x)
+        if xi == 1:
+            return i + 1
+        if r > 0:
+            return
 
 
 def xor(t1, t2):
@@ -196,7 +220,11 @@ def xor_hex(t1, t2):
 
 def is_printable(data):
     import string
+    printable = set(string.printable)
+    printable_bytes = set(string.printable.encode('ascii'))
+    printable.update(printable_bytes)
+    
     for c in data:
-        if c not in string.printable:
+        if c not in printable:
             return False
     return True
