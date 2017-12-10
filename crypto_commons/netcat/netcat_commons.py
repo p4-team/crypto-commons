@@ -37,7 +37,7 @@ def receive_until_match(s, regex, timeout=1.0, limit=-1):
                 break
             all_data += new_char
             i += 1
-    except:
+    except Exception as e:
         pass
     s.settimeout(None)
     return all_data

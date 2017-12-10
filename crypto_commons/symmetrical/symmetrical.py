@@ -128,6 +128,7 @@ def set_byte_cbc(ct_bytes, pt_bytes, byte_number, new_value, block_size=16):
 
 def set_cbc_payload_for_block(ct, pt, payload, block_number, block_size=16):
     assert len(payload) <= block_size, "Payload can't be longer than a single block size!"
+    new_ct = ct
     for i, c in enumerate(payload):
-        ct = set_byte_cbc(ct, pt, block_number * block_size + i, c)
-    return ct
+        new_ct = set_byte_cbc(new_ct, pt, block_number * block_size + i, c)
+    return new_ct
