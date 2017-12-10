@@ -168,7 +168,7 @@ def long_range(start, stop, step=1):
 def integer_log(x, xi, limit=1000):
     """
     Computation of integer logarithm.
-    For x and x^i returns exponent i. If no such i exists
+    For x and x^i returns exponent i if such i exists.
     :param x: base
     :param xi: power value
     :param limit: search limit
