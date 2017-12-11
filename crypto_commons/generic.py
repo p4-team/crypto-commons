@@ -24,7 +24,7 @@ def long_to_bytes(data):
     :return: ascii encoded string
     """
     data = int(data)
-    data = hex(data).strip('0xL')
+    data = hex(data).rstrip('L').lstrip('0x')
     if len(data) % 2 == 1:
         data = '0' + data
 
