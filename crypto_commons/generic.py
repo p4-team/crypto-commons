@@ -101,8 +101,7 @@ def get_primes(limit=1000000):
     return primes
 
 
-
-def factor(n, limit=1000000):
+def factor_p(n, primes, limit=1000000):
     """
     Factor given value using sieve up to a certain limit
     :param n: number to factor
@@ -110,7 +109,6 @@ def factor(n, limit=1000000):
     :return: list of factors and residue
     """
     factors = []
-    primes = get_primes(limit)
     for prime in primes:
         while n % prime == 0 and n > 2:
             n //= prime
@@ -122,6 +120,16 @@ def factor(n, limit=1000000):
             factors.append(n)
             n = 1
     return factors, n
+
+
+def factor(n, limit=1000000):
+    """
+    Factor given value using sieve up to a certain limit
+    :param n: number to factor
+    :param limit: sieve limit
+    :return: list of factors and residue
+    """
+    return factor_p(n, get_primes(limit), limit)
 
 
 

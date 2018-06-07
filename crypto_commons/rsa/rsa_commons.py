@@ -70,7 +70,7 @@ def get_fi_repeated_prime(p, k=1):
 
 def extended_gcd(a, b):
     """
-    Calculate extended greates common divisor of numbers a,b
+    Calculate extended greatest common divisor of numbers a,b
     :param a: first number
     :param b: second number
     :return: gcd(a,b) and remainders
