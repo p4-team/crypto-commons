@@ -1,4 +1,16 @@
-from builtins import range as long_range
+def long_range(start, stop, step=1):
+    """
+    Sequence generator working with python longs
+    :param start: start of the range
+    :param stop: end of the range (exclusive)
+    :param step: step
+    :return: sequence of numbers
+    """
+    i = start
+    while i < stop:
+        yield i
+        i += step
+
 
 def bytes_to_long(data):
     """
@@ -12,7 +24,6 @@ def bytes_to_long(data):
         return bytes_to_long(data.encode('utf-8'))
     except AttributeError:
         return int(data.encode('hex'), 16)
-
 
 
 def long_to_bytes(data):
@@ -31,7 +42,6 @@ def long_to_bytes(data):
     return bytes(bytearray(int(c, 16) for c in chunk(data, 2)))
 
 
-
 def chunk(input_data, size):
     """
     Chunk given bytes into parts
@@ -41,8 +51,7 @@ def chunk(input_data, size):
     """
     assert len(input_data) % size == 0, \
         "can't split data into chunks of equal size, try using chunk_with_remainder or pad data"
-    return [input_data[i:i+size] for i in range(0, len(input_data), size)]
-
+    return [input_data[i:i + size] for i in range(0, len(input_data), size)]
 
 
 def chunk_with_remainder(input_data, size):
@@ -61,7 +70,6 @@ def chunk_with_remainder(input_data, size):
         return chunk(core, size) + [remainder]
 
 
-
 def multiply(values):
     """
     Multiply values on the list
@@ -70,7 +78,6 @@ def multiply(values):
     """
     import functools
     return functools.reduce(lambda x, y: x * y, values, 1)
-
 
 
 def factorial(n):
@@ -84,7 +91,6 @@ def factorial(n):
     return math.factorial(n)
 
 
-
 def get_primes(limit=1000000):
     """
     Use sieve to get list of prime numbers in range
@@ -93,7 +99,7 @@ def get_primes(limit=1000000):
     """
     m = limit + 1
     numbers = [True for _ in long_range(0, m)]
-    for i in long_range(2, int(limit**0.5)):
+    for i in long_range(2, int(limit ** 0.5)):
         if numbers[i]:
             for j in long_range(i * i, m, i):
                 numbers[j] = False
@@ -116,7 +122,7 @@ def factor_p(n, primes, limit=1000000):
         if n < 2:
             break
     else:
-        if n < limit**2:
+        if n < limit ** 2:
             factors.append(n)
             n = 1
     return factors, n
@@ -130,7 +136,6 @@ def factor(n, limit=1000000):
     :return: list of factors and residue
     """
     return factor_p(n, get_primes(limit), limit)
-
 
 
 def fermat_factors(n):
@@ -216,7 +221,7 @@ def xor_string(t1, t2):
     :param t2: string 2
     :return: string with xored values
     """
-    
+
     t1 = map(ord, t1)
     t2 = map(ord, t2)
 
@@ -244,4 +249,4 @@ def xor_hex(t1, t2):
 def is_printable(data):
     import string
     printable = set(string.printable).union(string.printable.encode('utf-8'))
-    return len(set(data).difference(printable)) == 0 
+    return len(set(data).difference(printable)) == 0
