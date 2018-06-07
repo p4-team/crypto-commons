@@ -123,7 +123,7 @@ def lcm_multi(numbers):
     :param numbers: list of numbers
     :return: lcm(a,b,c,d,...)
     """
-    return multiply(numbers) // gcd_multi(numbers)
+    return reduce(lcm, numbers)
 
 
 def modinv(x, y):
