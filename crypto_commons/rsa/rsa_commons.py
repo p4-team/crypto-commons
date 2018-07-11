@@ -220,7 +220,7 @@ def homomorphic_blinding_rsa(payload, get_signature, N, splits=2):
     It will use the signature service multiple times to get final signature.
     :param payload: data to sign
     :param get_signature: function returning signature
-    :param N: public exponent
+    :param N: modulus
     :param splits: on how many parts the data should be split
     :return: signed data
     """
