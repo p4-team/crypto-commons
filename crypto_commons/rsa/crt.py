@@ -8,7 +8,20 @@ from crypto_commons.generic import chunk_with_remainder, bytes_to_long, long_to_
 
 
 def hastad_attack_parallel(residue_and_moduli, e, parallel=6, major_chunk_size=1200, minor_chunk_size=120):
+    """
+    Calculate Hastad broadcast attack using Chinese Remainder Theorem using parallel solver.
+    The more parallel processes you choose, the faster it will run, assuming you have enough CPU cores.
+    The bigger the chunks, the faster it will run, but it will also consume more memory.
+    Memory consumption is maximum once minor chunks start to process, so if you reached this stage without swapping, you should be fine.
+    :param residue_and_moduli: list of pairs (remainder, modulus)
+    :param e: RSA public exponent
+    :param parallel: how many parallel processes to run, best effects with n-1 or n-2, where n is number of cores you have
+    :param major_chunk_size: size of the data split chunk
+    :param minor_chunk_size: size of single multiplication chunk
+    :return: attack result, most likely RSA plaintext if there was enough data
+    """
     import gmpy2
+    print("With this setup you can recover RSA message only if length was < %f of the average modulus size" % (len(residue_and_moduli) / (e * 1.0)))
     if major_chunk_size % parallel != 0 or minor_chunk_size % parallel != 0:
         print("Keep in mind that it's better to choose chunk size as multiples of parallel processes count")
     crt = solve_crt(residue_and_moduli, parallel, major_chunk_size, minor_chunk_size)
@@ -106,7 +119,7 @@ def sanity_test():
     x = bytes_to_long("alamakota")
     e = gmpy2.next_prime(50)
     inputs = []
-    for _ in range(e):
+    for _ in range(e - 40):
         print(_)
         p = gmpy2.next_prime(getrandbits(1024))
         q = gmpy2.next_prime(getrandbits(1024))
