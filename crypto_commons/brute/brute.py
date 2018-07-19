@@ -10,4 +10,6 @@ def brute(worker, data_list, processes=8):
     :return: list of worker return values
     """
     pool = multiprocessing.Pool(processes=processes)
-    return pool.map(worker, data_list)
+    result = pool.map(worker, data_list)
+    pool.close()
+    return result
