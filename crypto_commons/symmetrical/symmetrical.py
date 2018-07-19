@@ -5,24 +5,20 @@ import sys
 from crypto_commons.generic import chunk, xor_hex, chunk_with_remainder
 
 
-def brute_ecb_suffix(encrypt, known_suffix="", expected_suffix_len=32, prefix="", block_size=16):
-    block_len_hex = block_size * 2
-    expected_suffix_len_hex = expected_suffix_len * 2
-    suffix = known_suffix
-    recovery_block = expected_suffix_len_hex / block_len_hex + 1
-    for i in range(expected_suffix_len_hex - len(suffix), 0, -1):
-        data = prefix + 'A' * i
-        correct = chunk(encrypt(data), block_len_hex)[recovery_block]
-        for c in '{' + "}" + "_" + string.letters + string.digits:
+def brute_ecb_suffix(encrypt_function, block_size=16, expected_suffix_len=32):
+    suffix = ""
+    recovery_block = expected_suffix_len / block_size - 1
+    for i in range(expected_suffix_len - len(suffix) - 1, -1, -1):
+        data = 'A' * i
+        correct = chunk(encrypt_function(data), block_size)[recovery_block]
+        for character in range(256):
+            c = chr(character)
             test = data + suffix + c
             try:
-                encrypted = chunk(encrypt(test), block_len_hex)[recovery_block]
+                encrypted = chunk(encrypt_function(test), block_size)[recovery_block]
                 if correct == encrypted:
                     suffix += c
-                    print('FOUND', expected_suffix_len_hex - i, c)
-                    if c == "}":
-                        print(suffix)
-                        return suffix
+                    print('FOUND', expected_suffix_len - i, c)
                     break
             except:
                 pass
@@ -74,9 +70,9 @@ def recover_block(block, cipher_block, found, oracle_fun, size_block, search_cha
     valid_value = []
     print("[+] Search value of block:", block, "\n")
     for i in range(0, size_block):
-        for index, ct_pos in enumerate(range(size_block)+(map(ord, search_charset))):
+        for index, ct_pos in enumerate(range(size_block) + (map(ord, search_charset))):
             if ct_pos != i + 1 or (
-                            len(valid_value) > 0 and int(valid_value[len(valid_value) - 1], 16) == ct_pos):
+                    len(valid_value) > 0 and int(valid_value[len(valid_value) - 1], 16) == ct_pos):
                 bk = create_byte_search_block(size_block, i, ct_pos, valid_value)
                 bp = cipher_block[block - 1]
                 bc = create_block_padding(size_block, i)
@@ -109,7 +105,7 @@ def recover_block(block, cipher_block, found, oracle_fun, size_block, search_cha
         if not found:
             print("\n[-] Error, decryption failed for byte %d" % i)
             valid_value.insert(0, '3f')
-            print() 
+            print()
             bytes_found = ''.join(valid_value)
             print('\033[36m' + '\033[1m' + "[+]" + '\033[0m' + " Found", i + 1, "bytes :", bytes_found)
             print('\033[36m' + '\033[1m' + "[+]" + '\033[0m' + " Found", i + 1, "bytes :", bytes_found.decode("hex"))
