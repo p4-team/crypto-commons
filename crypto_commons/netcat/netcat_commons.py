@@ -1,6 +1,6 @@
+import re
 import socket
 import telnetlib
-import re
 
 
 def nc(host, port):
@@ -18,12 +18,12 @@ def receive_until(s, delimiters):
     return all_data + data
 
 
-def receive_until_match(s, regex, timeout=1.0, limit=-1):
+def receive_until_match(s, regex, timeout=None, limit=-1):
     """
     Receive data from socket until regular expression is matching
     :param s: socket
     :param regex: regex to match
-    :param timeout: read timeout
+    :param timeout: read timeout, None for no timeout
     :param limit: data read attempts limit
     :return: read data
     """
@@ -38,6 +38,7 @@ def receive_until_match(s, regex, timeout=1.0, limit=-1):
             all_data += new_char
             i += 1
     except Exception as e:
+        print('error', e)
         pass
     s.settimeout(None)
     return all_data
