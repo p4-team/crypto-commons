@@ -1,4 +1,3 @@
-
 def long_range(start, stop, step=1):
     """
     Sequence generator working with python longs
