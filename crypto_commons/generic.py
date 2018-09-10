@@ -1,3 +1,4 @@
+
 def long_range(start, stop, step=1):
     """
     Sequence generator working with python longs
@@ -203,14 +204,15 @@ def discrete_log(x, xi, limit=1000):
     return integer_log(x, xi, limit)
 
 
-def xor(t1, t2):
+def xor(*t):
     """
-    XOR two arrays with integers
-    :param t1: array 1
-    :param t2: array 2
+    XOR variable number of arrays with integers
+    :param *t: arrays 
     :return: list with xored values
     """
-    return [x ^ y for x, y in zip(t1, t2)]
+    from functools import reduce
+    from operator import xor
+    return [reduce(xor, x, 0) for x in zip(*t)]
 
 
 def xor_string(t1, t2):
