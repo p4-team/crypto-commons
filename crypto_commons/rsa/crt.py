@@ -33,7 +33,7 @@ def solve_crt(residue_and_moduli, parallel=6, major_chunk_size=1000, minor_chunk
     residues, moduli = zip(*residue_and_moduli)
     print("Calculate composite modulus N")
     N = multiply(moduli, parallel)
-    chunks = len(residues) / major_chunk_size
+    chunks = len(residues) // major_chunk_size
     print("Number of major chunks", chunks + 1)
     solution = 0
     for i in range(chunks + 1):
@@ -77,11 +77,11 @@ def mults_data_gen_slice(residues, Nxs, ds, start, stop):
 
 def calculate_mults_and_add_partial(data, N, parallel):
     print("Calculating minor chunk")
-    return reduce(gmpy2.add, brute(worker_mults, data, processes=parallel), 1) % N
+    return functools.reduce(gmpy2.add, brute(worker_mults, data, processes=parallel), 1) % N
 
 
 def calculate_mults_and_add(Nxs, ds, residues, N, minor_chunk_size, parallel):
-    chunks = len(residues) / minor_chunk_size
+    chunks = len(residues) // minor_chunk_size
     print("Minor chunks number", chunks + 1)
     result = 0
     for start in range(chunks + 1):
