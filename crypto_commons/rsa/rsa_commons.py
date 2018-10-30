@@ -75,6 +75,7 @@ def extended_gcd(a, b):
     :param b: second number
     :return: gcd(a,b) and remainders
     """
+
     def copysign(a, b):
         return a * (1 if b >= 0 else -1)
 
@@ -236,9 +237,32 @@ def homomorphic_blinding_rsa(payload, get_signature, N, splits=2):
     return result_sig
 
 
+def modular_sqrt_composite(c, p, q):
+    """
+    Calculates modular square root of composite value for given 2 factors
+    For a = b^2 mod p*q calculates b
+    :param a: residue
+    :param p: modulus prime factor
+    :param q: modulus prime factor
+    :return: 4 potential root values
+    """
+    n = p * q
+    gcd_value, yp, yq = extended_gcd(p, q)
+    mp = modular_sqrt(c, p)
+    mq = modular_sqrt(c, q)
+    assert yp * p + yq * q == 1
+    assert (mp * mp) % p == c % p
+    assert (mq * mq) % q == c % q
+    r1 = (yp * p * mq + yq * q * mp) % n
+    s1 = (yp * p * mq - yq * q * mp) % n
+    r2 = n - r1
+    s2 = n - s1
+    return r1, s1, r2, s2
+
+
 def modular_sqrt(a, p):
     """
-    Calculates modular square root.
+    Calculates modular square root with prime modulus.
     For a = b^2 mod p calculates b
     :param a: residue
     :param p: modulus
