@@ -70,7 +70,7 @@ def lsb_oracle_from_bits(upper_bound, bits):
     for bit in bits:
         flag_count *= 2
         n_count = n_count * 2 - 1
-        print("bit  = %d" % bit)
+        print("bit value = %d" % bit)
         print("upper = %d" % data_upper_bound)
         print("upper flag = %s" % long_to_bytes(data_upper_bound))
         print("lower = %d" % data_lower_bound)

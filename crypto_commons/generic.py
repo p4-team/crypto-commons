@@ -38,7 +38,6 @@ def long_to_bytes(data):
     data = hex(data).rstrip('L').lstrip('0x')
     if len(data) % 2 == 1:
         data = '0' + data
-
     return bytes(bytearray(int(c, 16) for c in chunk(data, 2)))
 
 
