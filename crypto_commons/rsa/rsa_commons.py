@@ -169,6 +169,21 @@ def rsa_crt_distinct_multiprime(c, e, factors):
     return x
 
 
+def lift(f, df, p, k, previous):
+    result = []
+    for lower_solution in previous:
+        dfr = df(lower_solution)
+        fr = f(lower_solution)
+        if dfr % p != 0:
+            t = (-(extended_gcd(dfr, p)[1]) * int(fr / p ** (k - 1))) % p
+            result.append(lower_solution + t * p ** (k - 1))
+        if dfr % p == 0:
+            if fr % p ** k == 0:
+                for t in range(0, p):
+                    result.append(lower_solution + t * p ** (k - 1))
+    return result
+
+
 def hensel_lifting(f, df, p, k, base_solution):
     """
     Calculate solutions to f(x) = 0 mod p^k for prime p
@@ -179,21 +194,13 @@ def hensel_lifting(f, df, p, k, base_solution):
     :param base_solution: solution to return for p=1
     :return: possible solutions to f(x) = 0 mod p^k
     """
-    previous_solution = [base_solution]
-    for x in range(k - 1):
-        new_solution = []
-        for i, n in enumerate(previous_solution):
-            dfr = df(n)
-            fr = f(n)
-            if dfr % p != 0:
-                t = (-(extended_gcd(dfr, p)[1]) * int(fr // p ** (k - 1))) % p
-                new_solution.append(previous_solution[i] + t * p ** (k - 1))
-            if dfr % p == 0:
-                if fr % p ** k == 0:
-                    for t in range(0, p):
-                        new_solution.append(previous_solution[i] + t * p ** (k - 1))
-        previous_solution = new_solution
-    return previous_solution
+    if type(base_solution) is list:
+        solution = base_solution
+    else:
+        solution = [base_solution]
+    for i in range(2, k + 1):
+        solution = lift(f, df, p, i, solution)
+    return solution
 
 
 def hastad_broadcast(residue_and_moduli):
