@@ -1,3 +1,4 @@
+from functools import reduce
 from crypto_commons.generic import bytes_to_long, find_divisor, multiply, long_to_bytes
 
 
