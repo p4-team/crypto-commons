@@ -24,6 +24,27 @@ def rsa(x, exp, n):
     return pow(ensure_long(x), exp, n)
 
 
+def recover_factors_from_phi(n, phi):
+    """
+    For n = p*q and phi = (p-1)*(q-1), recover p and q as ints
+    Both p and q need to be prime
+    :param n: int
+    :param phi: int
+    :return: result pair of ints (p, q), sorted
+    """
+    from gmpy2 import isqrt
+    p_plus_q = n - phi + 1
+    delta = p_plus_q**2 - 4*n
+    p = int((p_plus_q + isqrt(delta)) // 2)
+    q = int(n // p)
+
+    if p*q != n or (p-1)*(q-1) != phi:
+        raise ValueError("n is not a product of two primes"
+                         ", or phi is not it's totient")
+
+    return tuple(sorted((p, q)))
+
+
 def ensure_long(x):
     try:
         return bytes_to_long(x)
