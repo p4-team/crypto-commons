@@ -44,6 +44,7 @@ def recover_factors_from_phi(n, phi):
 
     return tuple(sorted((p, q)))
 
+
 def ensure_long(x):
     try:
         return bytes_to_long(x)
