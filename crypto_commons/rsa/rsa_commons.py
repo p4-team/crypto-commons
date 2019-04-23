@@ -25,6 +25,13 @@ def rsa(x, exp, n):
 
 
 def recover_factors_from_phi(n, phi):
+    """
+    For n = p*q and phi = (p-1)*(q-1), recover p and q as ints
+    Both p and q need to be prime
+    :param n: int
+    :param phi: int
+    :return: result pair of ints (p, q), sorted
+    """
     from gmpy2 import isqrt
     p_plus_q = n - phi + 1
     delta = p_plus_q**2 - 4*n
