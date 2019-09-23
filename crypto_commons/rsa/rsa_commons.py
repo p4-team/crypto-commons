@@ -146,6 +146,7 @@ def lcm_multi(numbers):
     :param numbers: list of numbers
     :return: lcm(a,b,c,d,...)
     """
+    from functools import reduce
     return reduce(lcm, numbers)
 
 
@@ -213,7 +214,7 @@ def hensel_lifting(f, df, p, k, base_solution):
     :param df: derivative
     :param p: prime
     :param k: power
-    :param base_solution: solution to return for p=1
+    :param base_solution: solution to return for k=1
     :return: possible solutions to f(x) = 0 mod p^k
     """
     if type(base_solution) is list:
