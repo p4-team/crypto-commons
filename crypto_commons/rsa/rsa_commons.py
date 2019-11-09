@@ -1,3 +1,4 @@
+from functools import reduce
 from crypto_commons.generic import bytes_to_long, find_divisor, multiply, long_to_bytes
 
 
@@ -21,6 +22,27 @@ def rsa(x, exp, n):
     :return: result int
     """
     return pow(ensure_long(x), exp, n)
+
+
+def recover_factors_from_phi(n, phi):
+    """
+    For n = p*q and phi = (p-1)*(q-1), recover p and q as ints
+    Both p and q need to be prime
+    :param n: int
+    :param phi: int
+    :return: result pair of ints (p, q), sorted
+    """
+    from gmpy2 import isqrt
+    p_plus_q = n - phi + 1
+    delta = p_plus_q**2 - 4*n
+    p = int((p_plus_q + isqrt(delta)) // 2)
+    q = int(n // p)
+
+    if p*q != n or (p-1)*(q-1) != phi:
+        raise ValueError("n is not a product of two primes"
+                         ", or phi is not it's totient")
+
+    return tuple(sorted((p, q)))
 
 
 def ensure_long(x):
@@ -124,6 +146,7 @@ def lcm_multi(numbers):
     :param numbers: list of numbers
     :return: lcm(a,b,c,d,...)
     """
+    from functools import reduce
     return reduce(lcm, numbers)
 
 
@@ -191,7 +214,7 @@ def hensel_lifting(f, df, p, k, base_solution):
     :param df: derivative
     :param p: prime
     :param k: power
-    :param base_solution: solution to return for p=1
+    :param base_solution: solution to return for k=1
     :return: possible solutions to f(x) = 0 mod p^k
     """
     if type(base_solution) is list:

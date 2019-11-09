@@ -54,8 +54,8 @@ print(''.join(xored))
 [qiwi CTF, crypto 400](https://github.com/p4-team/ctf/blob/master/2016-11-17-qiwi-2016/hastad/README.md)
 
 ```python
-from src.crypto_commons.generic import long_to_bytes
-from src.crypto_commons.rsa.rsa_commons import hastad_broadcast
+from generic import long_to_bytes
+from rsa.rsa_commons import hastad_broadcast
 
 
 def main():
