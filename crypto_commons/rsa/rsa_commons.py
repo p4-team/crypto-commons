@@ -1,4 +1,6 @@
+import itertools
 from functools import reduce
+
 from crypto_commons.generic import bytes_to_long, find_divisor, multiply, long_to_bytes
 
 
@@ -34,11 +36,11 @@ def recover_factors_from_phi(n, phi):
     """
     from gmpy2 import isqrt
     p_plus_q = n - phi + 1
-    delta = p_plus_q**2 - 4*n
+    delta = p_plus_q ** 2 - 4 * n
     p = int((p_plus_q + isqrt(delta)) // 2)
     q = int(n // p)
 
-    if p*q != n or (p-1)*(q-1) != phi:
+    if p * q != n or (p - 1) * (q - 1) != phi:
         raise ValueError("n is not a product of two primes"
                          ", or phi is not it's totient")
 
@@ -267,27 +269,22 @@ def homomorphic_blinding_rsa(payload, get_signature, N, splits=2):
     return result_sig
 
 
-def modular_sqrt_composite(c, p, q):
+def modular_sqrt_composite(c, factors):
     """
-    Calculates modular square root of composite value for given 2 factors
-    For a = b^2 mod p*q calculates b
-    :param a: residue
-    :param p: modulus prime factor
-    :param q: modulus prime factor
-    :return: 4 potential root values
+    Calculates modular square root of composite value for given all modulus factors
+    For a = b^2 mod p*q*r*m... calculates b
+    :param c: residue
+    :param factors: list of modulus prime factors
+    :return: all potential root values
     """
-    n = p * q
-    gcd_value, yp, yq = extended_gcd(p, q)
-    mp = modular_sqrt(c, p)
-    mq = modular_sqrt(c, q)
-    assert yp * p + yq * q == 1
-    assert (mp * mp) % p == c % p
-    assert (mq * mq) % q == c % q
-    r1 = (yp * p * mq + yq * q * mp) % n
-    s1 = (yp * p * mq - yq * q * mp) % n
-    r2 = n - r1
-    s2 = n - s1
-    return r1, s1, r2, s2
+    n = multiply(factors)
+    roots = [[(modular_sqrt(c, x), x), (x - modular_sqrt(c, x), x)] for x in factors]
+    solutions = []
+    for x in itertools.product(*roots):
+        solution = solve_crt(list(x))
+        solutions.append(solution)
+        assert solution ** 2 % n == c
+    return solutions
 
 
 def modular_sqrt(a, p):
