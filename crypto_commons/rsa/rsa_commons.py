@@ -200,7 +200,7 @@ def lift(f, df, p, k, previous):
         dfr = df(lower_solution)
         fr = f(lower_solution)
         if dfr % p != 0:
-            t = (-(extended_gcd(dfr, p)[1]) * int(fr / p ** (k - 1))) % p
+            t = (-(extended_gcd(dfr, p)[1]) * (fr // p ** (k - 1))) % p
             result.append(lower_solution + t * p ** (k - 1))
         if dfr % p == 0:
             if fr % p ** k == 0:
