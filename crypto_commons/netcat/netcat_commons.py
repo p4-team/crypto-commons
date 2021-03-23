@@ -10,12 +10,12 @@ def nc(host, port):
 
 
 def receive_until(s, delimiters, break_on_empty=False):
-    all_data = ""
+    all_data = b""
     data = s.recv(1)
     while data not in delimiters:
         all_data += data
         data = s.recv(1)
-        if data == '' and break_on_empty:
+        if len(data) == 0 and break_on_empty:
             return all_data
     return all_data + data
 
@@ -30,13 +30,13 @@ def receive_until_match(s, regex, timeout=None, limit=-1, break_on_empty=False):
     :return: read data
     """
     s.settimeout(timeout)
-    all_data = ""
+    all_data = b""
     i = 0
     try:
-        while re.search(regex, all_data) is None:
+        while re.search(regex, all_data.decode("utf-8")) is None:
             new_char = s.recv(1)
             all_data += new_char
-            if (limit != -1 and i > limit) or (new_char == '' and break_on_empty):
+            if (limit != -1 and i > limit) or (len(new_char) == 0 and break_on_empty):
                 break
             i += 1
     except Exception as e:
@@ -47,7 +47,7 @@ def receive_until_match(s, regex, timeout=None, limit=-1, break_on_empty=False):
 
 
 def send(s, payload):
-    s.sendall(payload + "\n")
+    s.sendall(payload + b"\n")
 
 
 def interactive(s):
