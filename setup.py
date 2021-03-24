@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name = "crypto-commons",
-    version = "0.0.2",
+    version = "0.0.3",
     author = "p4-team",
     author_email = "team@p4.team",
     url = "https://github.com/p4-team/crypto-commons",
