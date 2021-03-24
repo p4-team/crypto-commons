@@ -38,7 +38,7 @@ def long_to_bytes(data):
     :return: ascii encoded string
     """
     if data == 0:
-        return '\0'
+        return "\0"
     data = int(data)
     data = hex(data).rstrip('L').lstrip('0x')
     if len(data) % 2 == 1:
@@ -258,7 +258,8 @@ def is_printable(data):
 
 
 def baby_steps_giant_steps(a, b, p, N=None):
-    if not N: N = 1 + int(math.sqrt(p))
+    if not N:
+        N = 1 + int(math.sqrt(p))
     baby_steps = {}
     baby_step = 1
     for r in long_range(0, N + 1):

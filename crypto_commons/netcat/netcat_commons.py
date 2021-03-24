@@ -15,7 +15,7 @@ def receive_until(s, delimiters, break_on_empty=False):
     while data not in delimiters:
         all_data += data
         data = s.recv(1)
-        if len(data) == 0 and break_on_empty:
+        if not data and break_on_empty:
             return all_data
     return all_data + data
 
@@ -36,7 +36,7 @@ def receive_until_match(s, regex, timeout=None, limit=-1, break_on_empty=False):
         while re.search(regex, all_data.decode("utf-8")) is None:
             new_char = s.recv(1)
             all_data += new_char
-            if (limit != -1 and i > limit) or (len(new_char) == 0 and break_on_empty):
+            if (limit != -1 and i > limit) or (not new_char and break_on_empty):
                 break
             i += 1
     except Exception as e:
