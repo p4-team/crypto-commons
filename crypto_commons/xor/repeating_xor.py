@@ -20,7 +20,7 @@ def interactive_hack(xored, ciphertexts, printable=False):
             err = "Can't break more than a single block at a time! Taking prefix '%s'"
             print(err % potential_plaintext_contents[:ciphertext_len])
 
-        max_missing_bytes = max(map(len, xored)) - len(potential_plaintext_contents)
+        max_missing_bytes = max(map(len, xored)) - len(potential_plaintext_contents) + 1
         for start_position in set(range(max_missing_bytes)).union({0}):
             for index, xored_ciphertext in enumerate(xored):
                 number_of_ciphertexts = len(ciphertexts)

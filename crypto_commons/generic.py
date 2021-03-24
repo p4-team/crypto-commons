@@ -1,3 +1,6 @@
+import math
+
+
 def long_range(start, stop, step=1):
     """
     Sequence generator working with python longs
@@ -34,6 +37,8 @@ def long_to_bytes(data):
     :param data: integer
     :return: ascii encoded string
     """
+    if data == 0:
+        return "\0"
     data = int(data)
     data = hex(data).rstrip('L').lstrip('0x')
     if len(data) % 2 == 1:
@@ -250,3 +255,40 @@ def is_printable(data):
     import string
     printable = set(string.printable).union(string.printable.encode('utf-8'))
     return len(set(data).difference(printable)) == 0
+
+
+def baby_steps_giant_steps(a, b, p, N=None):
+    if not N:
+        N = 1 + int(math.sqrt(p))
+    baby_steps = {}
+    baby_step = 1
+    for r in long_range(0, N + 1):
+        baby_steps[baby_step] = r
+        baby_step = baby_step * a % p
+    giant_stride = pow(a, (p - 2) * N, p)
+    giant_step = b
+    for q in long_range(0, N ** 8 + 1):
+        if giant_step in baby_steps:
+            result = q * N + baby_steps[giant_step]
+            return result
+        else:
+            giant_step = giant_step * giant_stride % p
+
+
+def jacobi_symbol(a, n):
+    assert (n > a > 0 and n % 2 == 1)
+    t = 1
+    while a != 0:
+        while a % 2 == 0:
+            a /= 2
+            r = n % 8
+            if r == 3 or r == 5:
+                t = -t
+        a, n = n, a
+        if a % 4 == n % 4 == 3:
+            t = -t
+        a %= n
+    if n == 1:
+        return t
+    else:
+        return 0
