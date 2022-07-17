@@ -5,6 +5,8 @@ from crypto_commons.rsa.rsa_commons import get_fi
 
 class TestRsaCommons(unittest.TestCase):
     def test_phi(self):
+        # Hardcoded test cases
+        # Borrowed from https://primefan.tripod.com/Phi500.html
         test_cases = {
             1: 1,
             2: 1,
