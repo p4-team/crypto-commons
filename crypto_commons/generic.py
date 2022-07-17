@@ -118,6 +118,7 @@ def factor_p(n, primes, limit=1000000):
     :param limit: sieve limit
     :return: list of factors and residue
     """
+    limit = min(n, limit)
     factors = []
     for prime in primes:
         while n % prime == 0 and n > 2:
@@ -139,6 +140,7 @@ def factor(n, limit=1000000):
     :param limit: sieve limit
     :return: list of factors and residue
     """
+    limit = min(n, limit) # No point in checking factors larger than n
     return factor_p(n, get_primes(limit), limit)
 
 
