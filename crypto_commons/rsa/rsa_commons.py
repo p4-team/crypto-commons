@@ -99,10 +99,10 @@ def get_fi(primes):
     :param primes: list of prime numbers
     :return: fi(n) = number of positive integers < n relatively prime to n
     """
-    phi = 1
-    for factor, repeat_count in Counter(primes).items():
-        phi *= get_fi_repeated_prime(factor, repeat_count)
-    return phi
+    return multiply(
+        get_fi_repeated_prime(factor, repeat_count)
+        for factor, repeat_count in Counter(primes).items()
+    )
 
 
 def extended_gcd(a, b):
