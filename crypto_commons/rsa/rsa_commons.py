@@ -1,5 +1,6 @@
 import itertools
 from functools import reduce
+from collections import Counter
 
 from crypto_commons.generic import bytes_to_long, find_divisor, multiply, long_to_bytes
 
@@ -90,6 +91,18 @@ def get_fi_repeated_prime(p, k=1):
     :return: fi(p^k)
     """
     return pow(p, k - 1) * (p - 1)
+
+
+def get_fi(primes):
+    """
+    Get Euler totient for list of pairwise prime numbers
+    :param primes: list of prime numbers
+    :return: fi(n) = number of positive integers < n relatively prime to n
+    """
+    return multiply(
+        get_fi_repeated_prime(factor, repeat_count)
+        for factor, repeat_count in Counter(primes).items()
+    )
 
 
 def extended_gcd(a, b):
