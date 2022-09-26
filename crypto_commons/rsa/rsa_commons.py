@@ -1,8 +1,9 @@
 import itertools
+from collections import Counter
 from functools import reduce
 from collections import Counter
 
-from crypto_commons.generic import bytes_to_long, find_divisor, multiply, long_to_bytes
+from crypto_commons.generic import bytes_to_long, find_divisor, multiply, long_to_bytes, long_range
 
 
 def rsa_printable(x, exp, n):
@@ -282,9 +283,37 @@ def homomorphic_blinding_rsa(payload, get_signature, N, splits=2):
     return result_sig
 
 
+def modular_sqrt_composite_powers(c, primes):
+    """
+    Calculates square root mod composite value given all modulus factors, even they are repeated
+    For a = b^2 mod p^k1*q^k2*r^k3*m^k4... calculates b
+    :param c: residue
+    :param factors: list of modulus prime factors
+    :return: all potential root values
+    """
+    factors = Counter(primes).items()
+    simple_roots = {prime: list({modular_sqrt(c, prime), prime - modular_sqrt(c, prime)}) for prime, _ in factors}
+    assert all(pow(root, 2, prime) == c % prime for prime, roots in simple_roots.items() for root in roots)
+    f = lambda x: x ** 2 - c
+    df = lambda x: 2 * x
+    roots = {}
+    for prime, k in factors:
+        if k > 1:
+            lifted = hensel_lifting(f, df, prime, k, simple_roots[prime])
+            assert all(pow(root, 2, prime ** k) == (c % prime ** k) for root in lifted)
+            roots[prime ** k] = lifted
+        else:
+            roots[prime] = simple_roots[prime]
+    res = [[(residue, modulo) for residue in roots] for modulo, roots in roots.items()]
+    solutions = [solve_crt(x) for x in itertools.product(*res)]
+    n = multiply(primes)
+    assert all(pow(solution, 2, n) for solution in solutions)
+    return solutions
+
+
 def modular_sqrt_composite(c, factors):
     """
-    Calculates modular square root of composite value for given all modulus factors
+    Calculates square root mod composite value given all co-prime modulus factors
     For a = b^2 mod p*q*r*m... calculates b
     :param c: residue
     :param factors: list of modulus prime factors
@@ -308,18 +337,19 @@ def modular_sqrt(a, p):
     :param p: modulus
     :return: root value
     """
-    if legendre_symbol(a, p) != 1:
-        return 0
-    elif a == 0:
+    a = a % p
+    if a == 0:
         return 0
     elif p == 2:
-        return p
+        return a
+    elif legendre_symbol(a, p) != 1:
+        return 0
     elif p % 4 == 3:
         return pow(a, (p + 1) // 4, p)
     s = p - 1
     e = 0
     while s % 2 == 0:
-        s /= 2
+        s //= 2
         e += 1
     n = 2
     while legendre_symbol(n, p) != -1:
@@ -331,7 +361,7 @@ def modular_sqrt(a, p):
     while True:
         t = b
         m = 0
-        for m in xrange(r):
+        for m in long_range(0, r):
             if t == 1:
                 break
             t = pow(t, 2, p)
